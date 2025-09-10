@@ -1,22 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+@section('title', 'Dashboard')
 
-<body>
-    <h1>user</h1>
-    <!-- resources/views/components/logout-form.blade.php -->
-    <form method="POST" action="{{ route('logout') }}">
-        @csrf
-        <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
-            Logout
-        </button>
-    </form>
+@php $active = 'dashboard';
+$title = 'Dashboard'; @endphp
 
-</body>
+@section('content')
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="p-6 rounded-2xl glass shadow-md">
+            <h3 class="text-lg font-semibold mb-2">Total Pegawai</h3>
+            <p class="text-3xl font-bold text-accent">{{ $totalPegawai ?? 0 }}</p>
+        </div>
 
-</html>
+        <div class="p-6 rounded-2xl glass shadow-md">
+            <h3 class="text-lg font-semibold mb-2">Lembur Bulan Ini</h3>
+            <p class="text-3xl font-bold text-accent">{{ $totalLembur ?? 0 }}</p>
+        </div>
+
+        <div class="p-6 rounded-2xl glass shadow-md">
+            <h3 class="text-lg font-semibold mb-2">Total Gaji Dibayar</h3>
+            <p class="text-3xl font-bold text-accent">Rp {{ number_format($totalGaji ?? 0) }}</p>
+        </div>
+    </section>
+@endsection
