@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Golongan;
 use App\Models\Pegawai;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,8 @@ class PegawaiController extends Controller
      */
     public function index()
     {
-        //
+        $pegawai = Pegawai::all();
+        return view('pages.pegawai.index', compact('pegawai'));
     }
 
     /**
@@ -20,7 +22,8 @@ class PegawaiController extends Controller
      */
     public function create()
     {
-        //
+        $golongan = Golongan::all();
+        return view('pages.pegawai.create', compact('golongan'));
     }
 
     /**
@@ -28,7 +31,17 @@ class PegawaiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'nama' => 'required|string|max:255',
+            'jabatan' => 'required|string|max:255',
+            'umur' => 'required|integer|min:18',
+            'alamat' => 'required|string',
+            'golongan_id' => 'required|exists:golongans,id',
+        ]);
+
+        Pegawai::create($validated);
+
+        return redirect()->route('pegawai.index')->with('success', 'Pegawai berhasil ditambahkan.');
     }
 
     /**
@@ -44,15 +57,29 @@ class PegawaiController extends Controller
      */
     public function edit(Pegawai $pegawai)
     {
-        //
+        $golongan = Golongan::all();
+
+        return view('pages.pegawai.edit', [
+            'title' => 'Edit Pegawai',
+            'active' => 'pegawai',
+            'pegawai' => $pegawai,
+            'golongan' => $golongan,
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Pegawai $pegawai)
     {
-        //
+        $validated = $request->validate([
+            'nama' => 'required|string|max:255',
+            'jabatan' => 'required|string|max:255',
+            'umur' => 'required|integer|min:18',
+            'alamat' => 'required|string',
+            'golongan_id' => 'required|exists:golongans,id',
+        ]);
+
+        $pegawai->update($validated);
+
+        return redirect()->route('pegawai.index')->with('success', 'Data pegawai berhasil diperbarui.');
     }
 
     /**
@@ -60,6 +87,8 @@ class PegawaiController extends Controller
      */
     public function destroy(Pegawai $pegawai)
     {
-        //
+        $pegawai->delete();
+
+        return redirect()->route('pegawai.index')->with('success', 'Data pegawai berhasil dihapus.');
     }
 }

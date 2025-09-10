@@ -24,8 +24,8 @@
             </li>
 
             <li>
-                <a href="" class="block px-4 py-2 rounded-xl transition
-             {{ ($active ?? '') === 'pegawai' ? 'bg-slate-700 text-white' : 'hover:bg-slate-700 hover:text-white' }}">
+                <a href="{{ route('pegawai.index')}}" class="block px-4 py-2 rounded-xl transition
+             {{ ($active ?? '') === 'pegawai.index' ? 'bg-slate-700 text-white' : 'hover:bg-slate-700 hover:text-white' }}">
                     👨‍💼 Pegawai
                 </a>
             </li>

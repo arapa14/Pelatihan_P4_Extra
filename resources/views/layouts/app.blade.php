@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@yield('title', 'Dashboard') • Kantor Papoy</title>
     @vite('resources/css/app.css')
+    {{-- Toastr CSS --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    {{-- Toastr JS --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <style>
         /* shared glass style */
         .glass {
@@ -45,7 +50,7 @@
 
     {{-- Script (sidebar toggle + small helpers) --}}
     <script>
-        (function () {
+        (function() {
             const menuBtn = document.getElementById("menuBtn");
             const sidebar = document.getElementById("sidebar");
             const overlay = document.getElementById("overlay");
@@ -54,7 +59,10 @@
                     sidebar.classList.remove("-translate-x-full");
                     overlay.classList.remove("hidden");
                     // fade in
-                    requestAnimationFrame(() => { overlay.classList.remove("opacity-0"); overlay.classList.add("opacity-100"); });
+                    requestAnimationFrame(() => {
+                        overlay.classList.remove("opacity-0");
+                        overlay.classList.add("opacity-100");
+                    });
                 });
             }
             if (overlay) {
@@ -67,6 +75,46 @@
             }
             // helper to set active menu from server-side via data-active attribute (optional)
         })();
+
+        @if (session('success'))
+            toastr.success("{{ session('success') }}", "Sukses");
+        @endif
+
+        @if (session('error'))
+            toastr.error("{{ session('error') }}", "Error");
+        @endif
+
+        @if (session('warning'))
+            toastr.warning("{{ session('warning') }}", "Perhatian");
+        @endif
+
+        @if (session('info'))
+            toastr.info("{{ session('info') }}", "Info");
+        @endif
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.querySelectorAll('.btn-delete').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                let form = this.closest('form');
+
+                Swal.fire({
+                    title: 'Yakin hapus?',
+                    text: "Data pegawai akan dihapus permanen.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#e3342f',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Ya, hapus!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                })
+            });
+        });
     </script>
 
     @stack('scripts') {{-- tambahan script jika halaman butuh --}}
