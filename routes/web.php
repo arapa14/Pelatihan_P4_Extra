@@ -9,6 +9,8 @@ Route::post('logout', [AuthController::class,'logout'])->name('logout');
 
 Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
 
+
+
 Route::middleware('isUser')->group(function() {
 
 });
