@@ -12,6 +12,11 @@
     <title>Login • {{ $appName }}</title>
     <meta name="description" content="Halaman login modern menggunakan Tailwind CSS" />
     @vite('resources/css/app.css')
+    {{-- Toastr CSS --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    {{-- Toastr JS --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <style>
         /* Small utilities for subtle glass effect */
         .glass {
@@ -161,6 +166,22 @@
                 toggle.setAttribute('aria-pressed', 'false');
             }
         });
+
+        @if (session('success'))
+            toastr.success("{{ session('success') }}", "Sukses");
+        @endif
+
+        @if (session('error'))
+            toastr.error("{{ session('error') }}", "Error");
+        @endif
+
+        @if (session('warning'))
+            toastr.warning("{{ session('warning') }}", "Perhatian");
+        @endif
+
+        @if (session('info'))
+            toastr.info("{{ session('info') }}", "Info");
+        @endif
     </script>
 </body>
 
