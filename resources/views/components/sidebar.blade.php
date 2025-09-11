@@ -52,16 +52,23 @@
             </li>
 
             {{-- contoh menu khusus admin --}}
-            @if($role === 'admin')
+            @if ($role === 'admin')
                 <li class="mt-4">
                     <span class="text-xs text-slate-400 px-4 block">Administrator</span>
                 </li>
                 <li>
-                    <a href="" class="block px-4 py-2 rounded-xl hover:bg-slate-700 hover:text-white transition">
+                    <a href="#" class="block px-4 py-2 rounded-xl hover:bg-slate-700 hover:text-white transition">
                         ⚙️ Pengaturan
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('user.index') }}" class="block px-4 py-2 rounded-xl transition
+                {{ Route::is('user.*') ? 'bg-slate-700 text-white' : 'hover:bg-slate-700 hover:text-white' }}">
+                        👥 User
+                    </a>
+                </li>
             @endif
+
         </ul>
     </nav>
 

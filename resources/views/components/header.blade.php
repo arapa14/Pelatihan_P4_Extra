@@ -22,7 +22,7 @@
                 {{ $user?->name ?? 'Tamu' }}
             </span>
             <span class="text-xs text-slate-400">
-                {{ ucfirst($user?->role ?? 'user') }}
+                {{ ucfirst($user?->email ?? '-') }}
             </span>
         </div>
     </div>
