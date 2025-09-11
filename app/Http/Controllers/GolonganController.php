@@ -10,9 +10,30 @@ class GolonganController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $golongan = Golongan::all();
+        $query = Golongan::query();
+
+        // SEARCH: cari berdasarkan nama
+        if ($search = $request->query('search')) {
+            $query->where('nama', 'like', "%{$search}%");
+        }
+
+        // FILTER: rentang gaji pokok (optional)
+        if ($min = $request->query('gaji_min')) {
+            $query->where('gaji_pokok', '>=', (int) $min);
+        }
+        if ($max = $request->query('gaji_max')) {
+            $query->where('gaji_pokok', '<=', (int) $max);
+        }
+
+        // per page
+        $perPage = (int) $request->query('per_page', 10);
+        $perPage = $perPage > 0 ? $perPage : 10;
+
+        // urut default
+        $golongan = $query->orderBy('nama')->paginate($perPage)->withQueryString();
+
         return view('pages.golongan.index', compact('golongan'));
     }
 
