@@ -34,4 +34,10 @@ Route::middleware('isAdmin')->group(function() {
     Route::get('/golongan/{golongan}/edit', [GolonganController::class, 'edit'])->name('golongan.edit');
     Route::put('/golongan/{golongan}', [GolonganController::class, 'update'])->name('golongan.update');
     Route::delete('/golongan/{golongan}', [GolonganController::class, 'destroy'])->name('golongan.destroy');
+
+    Route::get('/lembur/create', [LemburController::class, 'create'])->name('lembur.create');
+    Route::post('/lembur', [LemburController::class, 'store'])->name('lembur.store');
+    Route::get('/lembur/{lembur}/edit', [LemburController::class, 'edit'])->name('lembur.edit');
+    Route::put('/lembur/{lembur}', [LemburController::class, 'update'])->name('lembur.update');
+    Route::delete('/lembur/{lembur}', [LemburController::class, 'destroy'])->name('lembur.destroy');
 });

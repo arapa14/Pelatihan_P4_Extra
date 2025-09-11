@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lembur;
+use App\Models\Pegawai;
 use Illuminate\Http\Request;
 
 class LemburController extends Controller
@@ -12,7 +13,8 @@ class LemburController extends Controller
      */
     public function index()
     {
-        $
+        $lembur = Lembur::with('pegawai')->get();
+        return view('pages.lembur.index', compact('lembur'));
     }
 
     /**
@@ -20,7 +22,8 @@ class LemburController extends Controller
      */
     public function create()
     {
-        //
+        $pegawai = Pegawai::all();
+        return view('pages.lembur.create', compact('pegawai'));
     }
 
     /**
@@ -28,9 +31,18 @@ class LemburController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $validated = $request->validate([
+            'pegawai_id' => 'required|exists:pegawais,id',
+            'bulan' => 'required|integer|min:1|max:12',
+            'tahun' => 'required|integer|min:2000|max:2100',
+            'jumlah_jam' => 'required|integer|min:0',
+            'rate_per_jam' => 'required|integer|min:0',
+        ]);
 
+        Lembur::create($validated);
+
+        return redirect()->route('lembur.index')->with('success', 'Data lembur berhasil ditambahkan.');
+    }
     /**
      * Display the specified resource.
      */
@@ -44,7 +56,8 @@ class LemburController extends Controller
      */
     public function edit(Lembur $lembur)
     {
-        //
+        $pegawai = Pegawai::all();
+        return view('pages.lembur.edit', compact('lembur', 'pegawai'));
     }
 
     /**
@@ -52,7 +65,17 @@ class LemburController extends Controller
      */
     public function update(Request $request, Lembur $lembur)
     {
-        //
+        $validated = $request->validate([
+            'pegawai_id' => 'required|exists:pegawais,id',
+            'bulan' => 'required|integer|min:1|max:12',
+            'tahun' => 'required|integer|min:2000|max:2100',
+            'jumlah_jam' => 'required|integer|min:0',
+            'rate_per_jam' => 'required|integer|min:0',
+        ]);
+
+        $lembur->update($validated);
+
+        return redirect()->route('lembur.index')->with('success', 'Data lembur berhasil diperbarui.');
     }
 
     /**
@@ -60,6 +83,7 @@ class LemburController extends Controller
      */
     public function destroy(Lembur $lembur)
     {
-        //
+        $lembur->delete();
+        return redirect()->route('lembur.index')->with('success', 'Data lembur berhasil dihapus.');
     }
 }
