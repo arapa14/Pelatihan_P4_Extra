@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GajiController;
 use App\Http\Controllers\GolonganController;
 use App\Http\Controllers\LemburController;
 use App\Http\Controllers\PegawaiController;
@@ -16,6 +17,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/pegawai', [PegawaiController::class, 'index'])->name('pegawai.index');
     Route::get('/golongan', [GolonganController::class, 'index'])->name('golongan.index');
     Route::get('/lembur', [LemburController::class, 'index'])->name('lembur.index');
+    Route::get('/gaji', [GajiController::class, 'index'])->name('gaji.index');
 });
 
 Route::middleware('isUser')->group(function() {
@@ -40,4 +42,10 @@ Route::middleware('isAdmin')->group(function() {
     Route::get('/lembur/{lembur}/edit', [LemburController::class, 'edit'])->name('lembur.edit');
     Route::put('/lembur/{lembur}', [LemburController::class, 'update'])->name('lembur.update');
     Route::delete('/lembur/{lembur}', [LemburController::class, 'destroy'])->name('lembur.destroy');
+
+    Route::get('/gaji/create', [GajiController::class, 'create'])->name('gaji.create');
+    Route::post('/gaji', [GajiController::class, 'store'])->name('gaji.store');
+    Route::get('/gaji/{gaji}/edit', [GajiController::class, 'edit'])->name('gaji.edit');
+    Route::put('/gaji/{gaji}', [GajiController::class, 'update'])->name('gaji.update');
+    Route::delete('/gaji/{gaji}', [GajiController::class, 'destroy'])->name('gaji.destroy');
 });

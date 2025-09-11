@@ -18,10 +18,12 @@ return new class extends Migration {
             $table->unsignedInteger('jumlah_lembur')->default(0);   // total bayar lembur
             $table->unsignedInteger('potongan')->default(0);
             $table->unsignedInteger('gaji_diterima')->default(0);   // final
+            $table->unsignedTinyInteger('bulan');
+            $table->unsignedSmallInteger('tahun');
             // tanggal gaji tetap biarkan sebagai date, atau simpan bulan/tahun juga
             $table->date('tanggal_gaji');
             $table->timestamps();
-            $table->unique(['pegawai_id', 'tanggal_gaji']);
+            $table->unique(['pegawai_id', 'bulan', 'tahun']);
         });
     }
 

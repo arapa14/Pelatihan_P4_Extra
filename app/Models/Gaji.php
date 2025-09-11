@@ -14,7 +14,9 @@ class Gaji extends Model
         'jumlah_lembur',
         'potongan',
         'gaji_diterima',
-        'tanggal_gaji'
+        'tanggal_gaji',
+        'bulan',
+        'tahun',
     ];
 
     public function pegawai()

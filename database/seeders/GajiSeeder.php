@@ -17,6 +17,8 @@ class GajiSeeder extends Seeder
                 'jumlah_lembur' => 5 * 20000, // sesuai lembur yang kita masukkan
                 'potongan' => 0,
                 'gaji_diterima' => (3000000 + 250000 + 100000 + 150000) + (5 * 20000) - 0,
+                'bulan' => 8,
+                'tahun' => 2025,
                 'tanggal_gaji' => '2025-08-31',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -28,6 +30,8 @@ class GajiSeeder extends Seeder
                 'jumlah_lembur' => 8 * 30000,
                 'potongan' => 100000,
                 'gaji_diterima' => (5000000 + 400000 + 200000 + 200000) + (8 * 30000) - 100000,
+                'bulan' => 8,
+                'tahun' => 2025,
                 'tanggal_gaji' => '2025-08-31',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -39,14 +43,14 @@ class GajiSeeder extends Seeder
                 'jumlah_lembur' => 3 * 45000,
                 'potongan' => 200000,
                 'gaji_diterima' => (8000000 + 700000 + 400000 + 300000) + (3 * 45000) - 200000,
+                'bulan' => 8,
+                'tahun' => 2025,
                 'tanggal_gaji' => '2025-08-31',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
         ];
 
-        foreach ($gajis as $gaji) {
-            DB::table('gajis')->insert($gaji);
-        }
+        DB::table('gajis')->insert($gajis);
     }
 }

@@ -45,7 +45,7 @@
 
 
             <li>
-                <a href="" class="block px-4 py-2 rounded-xl transition
+                <a href="{{ route('gaji.index') }}" class="block px-4 py-2 rounded-xl transition
              {{ Route::is('gaji.*') ? 'bg-slate-700 text-white' : 'hover:bg-slate-700 hover:text-white' }}">
                     💰 Gaji
                 </a>
