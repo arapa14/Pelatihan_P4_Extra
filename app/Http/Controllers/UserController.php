@@ -12,10 +12,44 @@ class UserController extends Controller
     /**
      * Tampilkan daftar user
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::latest()->paginate(10);
-        return view('pages.user.index', compact('users'));
+        $query = User::query();
+
+        // SEARCH: nama atau email
+        if ($search = $request->query('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        // FILTER: role
+        if ($role = $request->query('role')) {
+            $query->where('role', $role);
+        }
+
+        // FILTER: created_at range
+        if ($from = $request->query('created_from')) {
+            $query->whereDate('created_at', '>=', $from);
+        }
+        if ($to = $request->query('created_to')) {
+            $query->whereDate('created_at', '<=', $to);
+        }
+
+        // per page
+        $perPage = (int) $request->query('per_page', 10);
+        $perPage = $perPage > 0 ? $perPage : 10;
+
+        // ambil daftar role unik untuk dropdown filter
+        $roles = User::select('role')->distinct()->pluck('role');
+
+        // ordering default: terbaru dulu
+        $users = $query->orderBy('created_at', 'desc')
+            ->paginate($perPage)
+            ->withQueryString();
+
+        return view('pages.user.index', compact('users', 'roles'));
     }
 
     /**

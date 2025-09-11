@@ -11,9 +11,43 @@ class LemburController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $lembur = Lembur::with('pegawai')->get();
+        $query = Lembur::with('pegawai');
+
+        // search by pegawai name
+        if ($search = $request->query('search')) {
+            $query->whereHas('pegawai', function ($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%");
+            });
+        }
+
+        // filter bulan (1-12) and tahun
+        if ($bulan = $request->query('bulan')) {
+            $query->where('bulan', $bulan);
+        }
+        if ($tahun = $request->query('tahun')) {
+            $query->where('tahun', $tahun);
+        }
+
+        // filter rate_per_jam range
+        if ($min = $request->query('rate_min')) {
+            $query->where('rate_per_jam', '>=', (int) $min);
+        }
+        if ($max = $request->query('rate_max')) {
+            $query->where('rate_per_jam', '<=', (int) $max);
+        }
+
+        // per page
+        $perPage = (int) $request->query('per_page', 10);
+        $perPage = $perPage > 0 ? $perPage : 10;
+
+        // ordering: terbaru dulu (tahun desc, bulan desc)
+        $lembur = $query->orderBy('tahun', 'desc')
+            ->orderBy('bulan', 'desc')
+            ->paginate($perPage)
+            ->withQueryString();
+
         return view('pages.lembur.index', compact('lembur'));
     }
 

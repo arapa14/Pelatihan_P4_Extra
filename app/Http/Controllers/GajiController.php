@@ -14,10 +14,56 @@ class GajiController extends Controller
     /**
      * Tampilkan daftar gaji
      */
-    public function index()
+    public function index(Request $request)
     {
-        $gaji = Gaji::with('pegawai')->latest()->paginate(10);
-        return view('pages.gaji.index', compact('gaji'));
+        $query = Gaji::with('pegawai');
+
+        // SEARCH: nama pegawai
+        if ($search = $request->query('search')) {
+            $query->whereHas('pegawai', function ($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%");
+            });
+        }
+
+        // FILTER: bulan & tahun
+        if ($bulan = $request->query('bulan')) {
+            $query->where('bulan', $bulan);
+        }
+        if ($tahun = $request->query('tahun')) {
+            $query->where('tahun', $tahun);
+        }
+
+        // FILTER: rentang jumlah_gaji
+        if ($min = $request->query('gaji_min')) {
+            $query->where('jumlah_gaji', '>=', (int) $min);
+        }
+        if ($max = $request->query('gaji_max')) {
+            $query->where('jumlah_gaji', '<=', (int) $max);
+        }
+
+        // FILTER: tanggal_gaji range (tanggal_awal, tanggal_akhir)
+        if ($from = $request->query('tanggal_from')) {
+            $query->whereDate('tanggal_gaji', '>=', $from);
+        }
+        if ($to = $request->query('tanggal_to')) {
+            $query->whereDate('tanggal_gaji', '<=', $to);
+        }
+
+        // per page
+        $perPage = (int) $request->query('per_page', 10);
+        $perPage = $perPage > 0 ? $perPage : 10;
+
+        // optional: ambil daftar tahun untuk dropdown filter (distinct)
+        $years = Gaji::select('tahun')->distinct()->orderBy('tahun', 'desc')->pluck('tahun');
+
+        // ordering: terbaru dulu
+        $gaji = $query->orderBy('tahun', 'desc')
+            ->orderBy('bulan', 'desc')
+            ->orderBy('tanggal_gaji', 'desc')
+            ->paginate($perPage)
+            ->withQueryString();
+
+        return view('pages.gaji.index', compact('gaji', 'years'));
     }
 
     /**
