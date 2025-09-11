@@ -1,10 +1,15 @@
+@php
+    $appName = DB::table('settings')->where('key', 'app_name')->value('value');
+    $appLogo = DB::table('settings')->where('key', 'app_logo')->value('value');
+@endphp
+
 <!doctype html>
 <html lang="id">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Login • Kantor Papoy</title>
+    <title>Login • {{ $appName }}</title>
     <meta name="description" content="Halaman login modern menggunakan Tailwind CSS" />
     @vite('resources/css/app.css')
     <style>
@@ -18,6 +23,10 @@
 
 <body
     class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 text-slate-100 flex items-center justify-center">
+    @php
+        $appName = DB::table('settings')->where('key', 'app_name')->value('value');
+        $appLogo = DB::table('settings')->where('key', 'app_logo')->value('value');
+    @endphp
 
     <main class="w-full max-w-6xl mx-auto p-6 lg:p-12">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
@@ -25,13 +34,13 @@
             <!-- Illustration / Hero -->
             <section class="hidden lg:flex flex-col items-start gap-6 p-8 rounded-2xl glass shadow-2xl">
                 <div class="flex items-center gap-3">
-                    <div
-                        class="w-12 h-12 rounded-lg bg-gradient-to-tr from-primary to-accent flex items-center justify-center text-slate-900 font-bold">
-                        KP</div>
-                    <div>
-                        <h1 class="text-2xl font-semibold">Selamat Datang di Kantor Papoy</h1>
-                        <p class="text-sm text-slate-300">Masuk untuk melanjutkan ke dashboard dan manajemen pegawai.
-                        </p>
+                    <div class="flex items-center gap-3">
+                        <img src="{{ asset($appLogo) }}" alt="Logo" class="w-12 h-12 rounded-lg object-cover">
+                        <div>
+                            <h1 class="text-2xl font-semibold">Selamat Datang di {{ $appName }}</h1>
+                            <p class="text-sm text-slate-300">Masuk untuk melanjutkan ke dashboard dan manajemen
+                                pegawai.</p>
+                        </div>
                     </div>
                 </div>
 
@@ -63,13 +72,12 @@
             <section class="relative bg-white/5 rounded-3xl p-8 lg:p-12 glass shadow-lg">
                 <div class="flex items-center justify-between mb-6">
                     <div class="flex items-center gap-3">
-                        <div
-                            class="w-10 h-10 rounded-md bg-gradient-to-tr from-primary to-accent flex items-center justify-center text-slate-900 font-semibold">
-                            KP</div>
+                        <img src="{{ asset($appLogo) }}" alt="Logo"
+                            class="w-12 h-12 rounded-lg object-cover">
                         <div>
-                            <h2 class="text-lg font-semibold">Login>
-                                <p class="text-sm text-slate-300">Masukkan email dan kata sandi Anda untuk melanjutkan.
-                                </p>
+                            <h1 class="text-2xl font-semibold">Selamat Datang di {{ $appName }}</h1>
+                            <p class="text-sm text-slate-300">Masuk untuk melanjutkan ke dashboard dan manajemen
+                                pegawai.</p>
                         </div>
                     </div>
                     <!-- <a href="#" class="text-sm text-slate-300 hover:text-white">Bantuan?</a> -->

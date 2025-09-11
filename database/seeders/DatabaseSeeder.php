@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             PegawaiSeeder::class,
             LemburSeeder::class,
             GajiSeeder::class,
+            SettingSeeder::class,
         ]);
     }
 }

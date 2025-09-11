@@ -1,10 +1,15 @@
+@php
+    $appName = DB::table('settings')->where('key', 'app_name')->value('value');
+    $appLogo = DB::table('settings')->where('key', 'app_logo')->value('value');
+@endphp
+
 <!doctype html>
 <html lang="id">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>@yield('title', 'Dashboard') • Kantor Papoy</title>
+    <title>@yield('title', 'Dashboard') • {{ $appName }}</title>
     @vite('resources/css/app.css')
     {{-- Toastr CSS --}}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
@@ -50,7 +55,7 @@
 
     {{-- Script (sidebar toggle + small helpers) --}}
     <script>
-        (function() {
+        (function () {
             const menuBtn = document.getElementById("menuBtn");
             const sidebar = document.getElementById("sidebar");
             const overlay = document.getElementById("overlay");
@@ -96,7 +101,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.querySelectorAll('.btn-delete').forEach(button => {
-            button.addEventListener('click', function(e) {
+            button.addEventListener('click', function (e) {
                 e.preventDefault();
                 let form = this.closest('form');
 

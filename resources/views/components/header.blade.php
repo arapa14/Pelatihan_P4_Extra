@@ -9,7 +9,7 @@
 
         <div>
             <h2 class="text-xl md:text-2xl font-semibold">{{ $title ?? 'Dashboard' }}</h2>
-            <p class="text-slate-400 text-sm">Selamat datang kembali di sistem manajemen Kantor Papoy.</p>
+            <p class="text-slate-400 text-sm">Selamat datang kembali di sistem manajemen {{ $appName }}</p>
         </div>
     </div>
 

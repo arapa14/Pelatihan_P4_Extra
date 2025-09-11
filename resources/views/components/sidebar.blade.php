@@ -6,12 +6,12 @@
 
 <aside id="sidebar"
     class="fixed md:static inset-y-0 left-0 w-64 glass shadow-xl flex flex-col transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-40">
+
     <div class="flex items-center gap-3 p-6 border-b border-slate-700">
-        <div
-            class="w-10 h-10 rounded-md bg-gradient-to-tr from-primary to-accent flex items-center justify-center text-slate-900 font-bold">
-            KP</div>
-        <h1 class="font-semibold text-lg">Kantor Papoy</h1>
+        <img src="{{ asset($appLogo) }}" alt="Logo" class="w-10 h-10 rounded-md object-cover">
+        <h1 class="font-semibold text-lg">{{ $appName }}</h1>
     </div>
+
 
     <nav class="flex-1 p-4">
         <ul class="space-y-2 text-slate-300">
@@ -57,14 +57,14 @@
                     <span class="text-xs text-slate-400 px-4 block">Administrator</span>
                 </li>
                 <li>
-                    <a href="#" class="block px-4 py-2 rounded-xl hover:bg-slate-700 hover:text-white transition">
-                        ⚙️ Pengaturan
+                    <a href="{{ route('user.index') }}" class="block px-4 py-2 rounded-xl transition
+                        {{ Route::is('user.*') ? 'bg-slate-700 text-white' : 'hover:bg-slate-700 hover:text-white' }}">
+                        👥 User
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('user.index') }}" class="block px-4 py-2 rounded-xl transition
-                {{ Route::is('user.*') ? 'bg-slate-700 text-white' : 'hover:bg-slate-700 hover:text-white' }}">
-                        👥 User
+                    <a href="#" class="block px-4 py-2 rounded-xl hover:bg-slate-700 hover:text-white transition">
+                        ⚙️ Pengaturan
                     </a>
                 </li>
             @endif
