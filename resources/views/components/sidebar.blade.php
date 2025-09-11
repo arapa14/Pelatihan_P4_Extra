@@ -4,8 +4,7 @@
     $role = $user->role ?? 'user'; // asumsi ada kolom role, contoh: 'admin' atau 'user'
 @endphp
 
-<aside id="sidebar"
-    class="fixed md:sticky top-0 h-screen w-64 glass shadow-xl flex flex-col z-40"">
+<aside id="sidebar" class="fixed md:sticky top-0 h-full md:h-screen w-64 glass shadow-xl flex flex-col transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-40">
 
     <div class="flex items-center gap-3 p-6 border-b border-slate-700">
         <img src="{{ asset($appLogo) }}" alt="Logo" class="w-10 h-10 rounded-md object-cover">
@@ -13,7 +12,7 @@
     </div>
 
 
-    <nav class="flex-1 p-4">
+    <nav class="flex-1 p-4 overflow-y-auto">
         <ul class="space-y-2 text-slate-300">
             <li>
                 <a href="{{ route('dashboard') }}" class="block px-4 py-2 rounded-xl transition
@@ -58,13 +57,13 @@
                 </li>
                 <li>
                     <a href="{{ route('user.index') }}" class="block px-4 py-2 rounded-xl transition
-                        {{ Route::is('user.*') ? 'bg-slate-700 text-white' : 'hover:bg-slate-700 hover:text-white' }}">
+                            {{ Route::is('user.*') ? 'bg-slate-700 text-white' : 'hover:bg-slate-700 hover:text-white' }}">
                         👥 User
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('setting.index') }}" class="block px-4 py-2 rounded-xl transition
-                    {{ Route::is('setting.*') ? 'bg-slate-700 text-white' : 'hover:bg-slate-700 hover:text-white' }}">
+                        {{ Route::is('setting.*') ? 'bg-slate-700 text-white' : 'hover:bg-slate-700 hover:text-white' }}">
                         ⚙️ Pengaturan
                     </a>
                 </li>
