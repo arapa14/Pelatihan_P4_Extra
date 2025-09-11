@@ -77,7 +77,7 @@
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit"
-                class="w-full py-2 rounded-xl bg-gradient-to-r from-primary to-accent text-slate-900 font-semibold hover:scale-[1.02] transition">
+                class="w-full py-2 rounded-xl bg-gradient-to-r from-primary to-accent text-white text-slate-900 font-semibold hover:scale-[1.02] transition">
                 Keluar
             </button>
         </form>

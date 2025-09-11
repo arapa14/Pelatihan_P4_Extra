@@ -72,8 +72,7 @@
             <section class="relative bg-white/5 rounded-3xl p-8 lg:p-12 glass shadow-lg">
                 <div class="flex items-center justify-between mb-6">
                     <div class="flex items-center gap-3">
-                        <img src="{{ asset($appLogo) }}" alt="Logo"
-                            class="w-12 h-12 rounded-lg object-cover">
+                        <img src="{{ asset($appLogo) }}" alt="Logo" class="w-12 h-12 rounded-lg object-cover">
                         <div>
                             <h1 class="text-2xl font-semibold">Selamat Datang di {{ $appName }}</h1>
                             <p class="text-sm text-slate-300">Masuk untuk melanjutkan ke dashboard dan manajemen
@@ -127,7 +126,9 @@
 
                     <div>
                         <button id="submitBtn"
-                            class="w-full py-3 rounded-xl bg-gradient-to-r from-primary to-accent text-slate-900 font-semibold shadow-md hover:scale-[1.01] active:scale-100 transition-transform">Masuk</button>
+                            class="w-full py-3 rounded-xl bg-gradient-to-r from-primary to-accent text-white font-semibold shadow-md hover:scale-[1.01] active:scale-100 transition-transform">
+                            Masuk
+                        </button>
                     </div>
 
                 </form>
