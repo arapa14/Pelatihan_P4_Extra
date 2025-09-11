@@ -16,37 +16,37 @@
     <nav class="flex-1 p-4">
         <ul class="space-y-2 text-slate-300">
             <li>
-                <a href="{{ route('dashboard') }}"
-                    class="block px-4 py-2 rounded-xl transition
-             {{ ($active ?? '') === 'dashboard' ? 'bg-slate-700 text-white' : 'hover:bg-slate-700 hover:text-white' }}">
+                <a href="{{ route('dashboard') }}" class="block px-4 py-2 rounded-xl transition
+            {{ Route::is('dashboard') ? 'bg-slate-700 text-white' : 'hover:bg-slate-700 hover:text-white' }}">
                     🏠 Dashboard
                 </a>
             </li>
 
             <li>
                 <a href="{{ route('pegawai.index')}}" class="block px-4 py-2 rounded-xl transition
-             {{ ($active ?? '') === 'pegawai.index' ? 'bg-slate-700 text-white' : 'hover:bg-slate-700 hover:text-white' }}">
+             {{ Route::is('pegawai.*') ? 'bg-slate-700 text-white' : 'hover:bg-slate-700 hover:text-white' }}">
                     👨‍💼 Pegawai
                 </a>
             </li>
 
             <li>
+                <a href="{{ route('golongan.index') }}" class="block px-4 py-2 rounded-xl transition        
+            {{ Route::is('golongan.*') ? 'bg-slate-700 text-white' : 'hover:bg-slate-700 hover:text-white' }}"> 📊
+                    Golongan
+                </a>
+            </li>
+
+            <li>
                 <a href="" class="block px-4 py-2 rounded-xl transition
-             {{ ($active ?? '') === 'lembur' ? 'bg-slate-700 text-white' : 'hover:bg-slate-700 hover:text-white' }}">
+             {{ Route::is('lembur.*') ? 'bg-slate-700 text-white' : 'hover:bg-slate-700 hover:text-white' }}">
                     🕒 Lembur
                 </a>
             </li>
 
-            <li>
-                <a href="" class="block px-4 py-2 rounded-xl transition
-             {{ ($active ?? '') === 'golongan' ? 'bg-slate-700 text-white' : 'hover:bg-slate-700 hover:text-white' }}">
-                    📊 Golongan
-                </a>
-            </li>
 
             <li>
                 <a href="" class="block px-4 py-2 rounded-xl transition
-             {{ ($active ?? '') === 'gaji' ? 'bg-slate-700 text-white' : 'hover:bg-slate-700 hover:text-white' }}">
+             {{ Route::is('gaji.*') ? 'bg-slate-700 text-white' : 'hover:bg-slate-700 hover:text-white' }}">
                     💰 Gaji
                 </a>
             </li>
@@ -57,8 +57,7 @@
                     <span class="text-xs text-slate-400 px-4 block">Administrator</span>
                 </li>
                 <li>
-                    <a href=""
-                        class="block px-4 py-2 rounded-xl hover:bg-slate-700 hover:text-white transition">
+                    <a href="" class="block px-4 py-2 rounded-xl hover:bg-slate-700 hover:text-white transition">
                         ⚙️ Pengaturan
                     </a>
                 </li>

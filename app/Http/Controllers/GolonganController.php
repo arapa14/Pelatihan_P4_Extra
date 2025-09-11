@@ -12,7 +12,8 @@ class GolonganController extends Controller
      */
     public function index()
     {
-        //
+        $golongan = Golongan::all();
+        return view('pages.golongan.index', compact('golongan'));
     }
 
     /**
@@ -20,7 +21,7 @@ class GolonganController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.golongan.create');
     }
 
     /**
@@ -28,7 +29,18 @@ class GolonganController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'nama' => 'required|string|max:255',
+            'gaji_pokok' => 'required|integer|min:0',
+            'tunjangan_keluarga' => 'required|integer|min:0',
+            'tunjangan_transport' => 'required|integer|min:0',
+            'tunjangan_makan' => 'required|integer|min:0',
+            'tarif_lembur_per_jam' => 'nullable|integer|min:0',
+        ]);
+
+        Golongan::create($validated);
+
+        return redirect()->route('golongan.index')->with('success', 'Golongan berhasil ditambahkan.');
     }
 
     /**
@@ -44,7 +56,7 @@ class GolonganController extends Controller
      */
     public function edit(Golongan $golongan)
     {
-        //
+        return view('pages.golongan.edit', compact('golongan'));
     }
 
     /**
@@ -52,7 +64,18 @@ class GolonganController extends Controller
      */
     public function update(Request $request, Golongan $golongan)
     {
-        //
+        $validated = $request->validate([
+            'nama' => 'required|string|max:255',
+            'gaji_pokok' => 'required|integer|min:0',
+            'tunjangan_keluarga' => 'required|integer|min:0',
+            'tunjangan_transport' => 'required|integer|min:0',
+            'tunjangan_makan' => 'required|integer|min:0',
+            'tarif_lembur_per_jam' => 'nullable|integer|min:0',
+        ]);
+
+        $golongan->update($validated);
+
+        return redirect()->route('golongan.index')->with('success', 'Data golongan berhasil diperbarui.');
     }
 
     /**
@@ -60,6 +83,8 @@ class GolonganController extends Controller
      */
     public function destroy(Golongan $golongan)
     {
-        //
+        $golongan->delete();
+
+        return redirect()->route('golongan.index')->with('success', 'Data golongan berhasil dihapus.');
     }
 }

@@ -12,7 +12,7 @@ class LemburController extends Controller
      */
     public function index()
     {
-        //
+        $
     }
 
     /**
