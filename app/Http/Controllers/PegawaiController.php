@@ -11,10 +11,44 @@ class PegawaiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pegawai = Pegawai::all();
-        return view('pages.pegawai.index', compact('pegawai'));
+        // ambil daftar golongan untuk dropdown filter
+        $golongans = Golongan::orderBy('nama')->get();
+
+        // dasar query (dengan relasi yang diperlukan)
+        $query = Pegawai::with('golongan');
+
+        // SEARCH (pencarian di nama, jabatan, alamat)
+        if ($search = $request->query('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                  ->orWhere('jabatan', 'like', "%{$search}%")
+                  ->orWhere('alamat', 'like', "%{$search}%");
+            });
+        }
+
+        // FILTER golongan
+        if ($golongan_id = $request->query('golongan_id')) {
+            $query->where('golongan_id', $golongan_id);
+        }
+
+        // Optional: filter umur range (contoh)
+        if ($min = $request->query('umur_min')) {
+            $query->where('umur', '>=', (int)$min);
+        }
+        if ($max = $request->query('umur_max')) {
+            $query->where('umur', '<=', (int)$max);
+        }
+
+        // per page default
+        $perPage = (int) $request->query('per_page', 10);
+        $perPage = $perPage > 0 ? $perPage : 10;
+
+        // paginate dan wariskan query string sehingga pagination link menyertakan search/filter
+        $pegawai = $query->orderBy('nama')->paginate($perPage)->withQueryString();
+
+        return view('pages.pegawai.index', compact('pegawai', 'golongans'));
     }
 
     /**
