@@ -5,7 +5,7 @@
 @endphp
 
 <aside id="sidebar"
-    class="fixed md:static inset-y-0 left-0 w-64 glass shadow-xl flex flex-col transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-40">
+    class="fixed md:sticky top-0 h-screen w-64 glass shadow-xl flex flex-col z-40"">
 
     <div class="flex items-center gap-3 p-6 border-b border-slate-700">
         <img src="{{ asset($appLogo) }}" alt="Logo" class="w-10 h-10 rounded-md object-cover">

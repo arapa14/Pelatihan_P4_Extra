@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Gaji;
+use App\Models\Lembur;
+use App\Models\Pegawai;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -44,9 +49,94 @@ class AuthController extends Controller
         }
 
         if ($user->role === 'user') {
-            return view('user.dashboard');
+            // Statistik umum untuk user
+            $totalPegawai = Pegawai::count();
+            $totalLembur = Lembur::whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
+                ->count();
+            $totalGaji = Gaji::whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
+                ->sum('gaji_diterima');
+
+            // Data grafik (6 bulan terakhir)
+            $gajiPerBulan = Gaji::selectRaw('YEAR(created_at) as tahun, MONTH(created_at) as bulan, SUM(gaji_diterima) as total')
+                ->where('created_at', '>=', now()->subMonths(6))
+                ->groupByRaw('YEAR(created_at), MONTH(created_at)')
+                ->orderByRaw('tahun, bulan')
+                ->get();
+
+            $lemburPerBulan = Lembur::selectRaw('YEAR(created_at) as tahun, MONTH(created_at) as bulan, COUNT(*) as total')
+                ->where('created_at', '>=', now()->subMonths(6))
+                ->groupByRaw('YEAR(created_at), MONTH(created_at)')
+                ->orderByRaw('tahun, bulan')
+                ->get();
+
+            $labels = collect();
+            $dataGaji = collect();
+            $dataLembur = collect();
+
+            foreach ($gajiPerBulan as $row) {
+                $labels->push(Carbon::create()->month($row->bulan)->format('M') . ' ' . $row->tahun);
+                $dataGaji->push($row->total);
+
+                $lemburRow = $lemburPerBulan->first(function ($l) use ($row) {
+                    return $l->tahun == $row->tahun && $l->bulan == $row->bulan;
+                });
+                $dataLembur->push($lemburRow->total ?? 0);
+            }
+
+            return view('user.dashboard', [
+                'totalPegawai' => $totalPegawai,
+                'totalLembur' => $totalLembur,
+                'totalGaji' => $totalGaji,
+                'labels' => $labels,
+                'dataGaji' => $dataGaji,
+                'dataLembur' => $dataLembur,
+            ]);
         } else if ($user->role === 'admin') {
-            return view('admin.dashboard');
+            // Statistik admin (lebih detail)
+            $totalPegawai = Pegawai::count();
+            $totalUser = User::count();
+            $totalLembur = Lembur::whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
+                ->count();
+            $totalGaji = Gaji::sum('gaji_diterima');
+
+            $gajiPerBulan = Gaji::selectRaw('YEAR(created_at) as tahun, MONTH(created_at) as bulan, SUM(gaji_diterima) as total')
+                ->where('created_at', '>=', now()->subMonths(6))
+                ->groupByRaw('YEAR(created_at), MONTH(created_at)')
+                ->orderByRaw('tahun, bulan')
+                ->get();
+
+            $lemburPerBulan = Lembur::selectRaw('YEAR(created_at) as tahun, MONTH(created_at) as bulan, COUNT(*) as total')
+                ->where('created_at', '>=', now()->subMonths(6))
+                ->groupByRaw('YEAR(created_at), MONTH(created_at)')
+                ->orderByRaw('tahun, bulan')
+                ->get();
+
+            $labels = collect();
+            $dataGaji = collect();
+            $dataLembur = collect();
+
+            foreach ($gajiPerBulan as $row) {
+                $labels->push(Carbon::create()->month($row->bulan)->format('M') . ' ' . $row->tahun);
+                $dataGaji->push($row->total);
+
+                $lemburRow = $lemburPerBulan->first(function ($l) use ($row) {
+                    return $l->tahun == $row->tahun && $l->bulan == $row->bulan;
+                });
+                $dataLembur->push($lemburRow->total ?? 0);
+            }
+
+            return view('admin.dashboard', [
+                'totalPegawai' => $totalPegawai,
+                'totalUser' => $totalUser,
+                'totalLembur' => $totalLembur,
+                'totalGaji' => $totalGaji,
+                'labels' => $labels,
+                'dataGaji' => $dataGaji,
+                'dataLembur' => $dataLembur,
+            ]);
         } else {
             abort(403);
         }
