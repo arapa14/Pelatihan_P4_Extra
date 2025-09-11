@@ -63,7 +63,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="block px-4 py-2 rounded-xl hover:bg-slate-700 hover:text-white transition">
+                    <a href="{{ route('setting.index') }}" class="block px-4 py-2 rounded-xl transition
+                    {{ Route::is('setting.*') ? 'bg-slate-700 text-white' : 'hover:bg-slate-700 hover:text-white' }}">
                         ⚙️ Pengaturan
                     </a>
                 </li>

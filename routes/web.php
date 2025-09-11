@@ -5,27 +5,28 @@ use App\Http\Controllers\GajiController;
 use App\Http\Controllers\GolonganController;
 use App\Http\Controllers\LemburController;
 use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'postLogin'])->name('login.post');
-Route::post('logout', [AuthController::class,'logout'])->name('logout');
+Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
 
-Route::middleware('auth')->group(function() {
+Route::middleware('auth')->group(function () {
     Route::get('/pegawai', [PegawaiController::class, 'index'])->name('pegawai.index');
     Route::get('/golongan', [GolonganController::class, 'index'])->name('golongan.index');
     Route::get('/lembur', [LemburController::class, 'index'])->name('lembur.index');
     Route::get('/gaji', [GajiController::class, 'index'])->name('gaji.index');
 });
 
-Route::middleware('isUser')->group(function() {
+Route::middleware('isUser')->group(function () {
 
 });
 
-Route::middleware('isAdmin')->group(function() {
+Route::middleware('isAdmin')->group(function () {
     // Pegawai
     Route::get('/pegawai/create', [PegawaiController::class, 'create'])->name('pegawai.create');
     Route::post('/pegawai', [PegawaiController::class, 'store'])->name('pegawai.store');
@@ -61,4 +62,8 @@ Route::middleware('isAdmin')->group(function() {
     Route::get('/user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
     Route::put('/user/{user}', [UserController::class, 'update'])->name('user.update');
     Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+
+    // Setting
+    Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
+    Route::post('/setting/update', [SettingController::class, 'update'])->name('setting.update');
 });

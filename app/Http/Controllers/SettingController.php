@@ -4,62 +4,43 @@ namespace App\Http\Controllers;
 
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Log;
 
 class SettingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $settings = DB::table('settings')->pluck('value', 'key');
+        return view('pages.settings.index', compact('settings'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function update(Request $request)
     {
-        //
-    }
+        try {
+            $validated = $request->validate([
+                'app_name' => 'required|string|max:255',
+                'app_logo' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
+            ]);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+            // Update app_name
+            DB::table('settings')
+                ->where('key', 'app_name')
+                ->update(['value' => $validated['app_name']]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Setting $setting)
-    {
-        //
-    }
+            // Update app_logo jika ada file baru
+            if ($request->hasFile('app_logo')) {
+                $path = $request->file('app_logo')->store('logo', 'public');
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Setting $setting)
-    {
-        //
-    }
+                DB::table('settings')
+                    ->where('key', 'app_logo')
+                    ->update(['value' => 'storage/' . $path]);
+            }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Setting $setting)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Setting $setting)
-    {
-        //
+            return redirect()->route('setting.index')->with('success', 'Pengaturan berhasil diperbarui.');
+        } catch (\Throwable $e) {
+            Log::error("Update setting failed: " . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat memperbarui pengaturan.');
+        }
     }
 }
