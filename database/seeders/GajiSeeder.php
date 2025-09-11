@@ -4,52 +4,49 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class GajiSeeder extends Seeder
 {
     public function run(): void
     {
-        $gajis = [
-            // Gaji Andi untuk Agustus 2025
-            [
-                'pegawai_id' => 1,
-                'jumlah_gaji' => 3000000 + 250000 + 100000 + 150000, // pokok + tunjangan
-                'jumlah_lembur' => 5 * 20000, // sesuai lembur yang kita masukkan
-                'potongan' => 0,
-                'gaji_diterima' => (3000000 + 250000 + 100000 + 150000) + (5 * 20000) - 0,
-                'bulan' => 8,
-                'tahun' => 2025,
-                'tanggal_gaji' => '2025-08-31',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            // Gaji Siti untuk Agustus 2025
-            [
-                'pegawai_id' => 2,
-                'jumlah_gaji' => 5000000 + 400000 + 200000 + 200000,
-                'jumlah_lembur' => 8 * 30000,
-                'potongan' => 100000,
-                'gaji_diterima' => (5000000 + 400000 + 200000 + 200000) + (8 * 30000) - 100000,
-                'bulan' => 8,
-                'tahun' => 2025,
-                'tanggal_gaji' => '2025-08-31',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            // Gaji Budi untuk Agustus 2025
-            [
-                'pegawai_id' => 3,
-                'jumlah_gaji' => 8000000 + 700000 + 400000 + 300000,
-                'jumlah_lembur' => 3 * 45000,
-                'potongan' => 200000,
-                'gaji_diterima' => (8000000 + 700000 + 400000 + 300000) + (3 * 45000) - 200000,
-                'bulan' => 8,
-                'tahun' => 2025,
-                'tanggal_gaji' => '2025-08-31',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+        $gajis = [];
+        $tahun = 2025;
+        $bulanRange = range(3, 8);
+
+        // Gaji pokok (tetap)
+        $pokok = [
+            1 => 3000000 + 250000 + 100000 + 150000, // Andi
+            2 => 5000000 + 400000 + 200000 + 200000, // Siti
+            3 => 8000000 + 700000 + 400000 + 300000, // Budi
         ];
+
+        // Fluktuasi potongan
+        $potonganPattern = [0, 100000, 50000, 200000, 150000, 75000];
+
+        foreach ($bulanRange as $index => $bulan) {
+            foreach ([1, 2, 3] as $pegawaiId) {
+                // variasi lembur tiap pegawai
+                $jamLembur = ($pegawaiId * 2) + rand(0, $index + 2);
+                $rate = $pegawaiId == 1 ? 20000 : ($pegawaiId == 2 ? 30000 : 45000);
+                $lembur = $jamLembur * $rate;
+
+                $potongan = $potonganPattern[$index] + rand(0, 50000);
+
+                $gajis[] = [
+                    'pegawai_id' => $pegawaiId,
+                    'jumlah_gaji' => $pokok[$pegawaiId],
+                    'jumlah_lembur' => $lembur,
+                    'potongan' => $potongan,
+                    'gaji_diterima' => $pokok[$pegawaiId] + $lembur - $potongan,
+                    'bulan' => $bulan,
+                    'tahun' => $tahun,
+                    'tanggal_gaji' => Carbon::create($tahun, $bulan, 28),
+                    'created_at' => Carbon::create($tahun, $bulan, 28),
+                    'updated_at' => Carbon::create($tahun, $bulan, 28),
+                ];
+            }
+        }
 
         DB::table('gajis')->insert($gajis);
     }
